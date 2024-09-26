@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Toggle Image with Supabase</title>
     <style>
-        #Image{
+        #Image {
             cursor: pointer;
             width: auto;
             height: auto;
@@ -20,47 +20,47 @@
 
 <script>
     const SUPABASE_URL = 'https://gnaavikfswbvkwduyjos.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18';  // Replace with your actual key
     const supabase = supabase.createClient('https://gnaavikfswbvkwduyjos.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18');
 
     const image = document.getElementById('Image');
     const images = ['off.png', 'on.png'];
     let currentIndex = 0;
 
-    async function loadCurrentImage(){
-        const{data, error} = await supabase
-        .from('image')
-        .select('current_image')
-        .single();
+    async function loadCurrentImage() {
+        const { data, error } = await supabase
+            .from('on_off')  // Use your actual table name
+            .select('current_image')
+            .single();
 
-        if(error){
+        if (error) {
             console.error('Error fetching image:', error);
             return;
         }
 
-        if(data && images.includes(data.current_image)){
-            currentIndex = images.indexOf(data.current_images);
+        if (data && images.includes(data.current_image)) {
+            currentIndex = images.indexOf(data.current_image);
             image.src = data.current_image;
-        }else{
+        } else {
             currentIndex = 0;
             image.src = images[currentIndex];
         }
     }
 
-    async function updateCurrentImage(){
-        const{error} = await supabase
-        .from('images')
-        .upsert({current_image: images[currentIndex]});
+    async function updateCurrentImage() {
+        const { error } = await supabase
+            .from('on_off')  // Use your actual table name
+            .upsert({ current_image: images[currentIndex] });
 
-        if(error){
+        if (error) {
             console.error('Error updating image:', error);
         }
     }
 
-
     image.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % images.length;
         image.src = images[currentIndex];
+        updateCurrentImage();  // Call the update function
     });
 
     loadCurrentImage();
