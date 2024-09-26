@@ -20,8 +20,8 @@
 
 <script>
     const SUPABASE_URL = 'https://gnaavikfswbvkwduyjos.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18';  // Replace with your actual key
-    const supabase = supabase.createClient('https://gnaavikfswbvkwduyjos.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18');
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // Replace with your actual key
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // Initialize supabase client
 
     const image = document.getElementById('Image');
     const images = ['off.png', 'on.png'];
@@ -29,7 +29,7 @@
 
     async function loadCurrentImage() {
         const { data, error } = await supabase
-            .from('on_off')  // Use your actual table name
+            .from('on_off') // Ensure this matches your table name
             .select('current_image')
             .single();
 
@@ -49,7 +49,7 @@
 
     async function updateCurrentImage() {
         const { error } = await supabase
-            .from('on_off')  // Use your actual table name
+            .from('on_off') // Ensure this matches your table name
             .upsert({ current_image: images[currentIndex] });
 
         if (error) {
@@ -58,12 +58,12 @@
     }
 
     image.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        image.src = images[currentIndex];
-        updateCurrentImage();  // Call the update function
+        currentIndex = (currentIndex + 1) % images.length; // Toggle index
+        image.src = images[currentIndex]; // Change image source
+        updateCurrentImage(); // Update in database
     });
 
-    loadCurrentImage();
+    loadCurrentImage(); // Load initial image
 </script>
     
 </body>
