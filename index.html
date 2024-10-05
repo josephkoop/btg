@@ -19,6 +19,7 @@
 <img id="Image" src="off.png" alt="Toggle Image">
 
 <script>
+    // Move the Supabase initialization to the top, before any other references
     const SUPABASE_URL = 'https://gnaavikfswbvkwduyjos.supabase.co';
     const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // Replace with your actual key
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // Initialize supabase client
