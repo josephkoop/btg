@@ -19,65 +19,15 @@
 <img id="Image" src="off.png" alt="Toggle Image">
 
 <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-        // Initialize Supabase client with the URL and anon key
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Supabase client
         const SUPABASE_URL = 'https://gnaavikfswbvkwduyjos.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18'; // Ensure this is correct
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduYWF2aWtmc3didmt3ZHV5am9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjczODEwODAsImV4cCI6MjA0Mjk1NzA4MH0.9LZ2WXCA-uLou4ksuLmCgMrPRWys3y00WJr2ddu0n18';
 
-        // Supabase client initialization
-        try {
-            const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log('Supabase client initialized', supabase);
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            const image = document.getElementById('Image');
-            const images = ['off.png', 'on.png'];
-            let currentIndex = 0;
-
-            async function loadCurrentImage() {
-                // Fetch the current image from the Supabase database
-                const { data, error } = await supabase
-                    .from('on_off') // Ensure this matches your table name
-                    .select('current_image')
-                    .single();
-
-                if (error) {
-                    console.error('Error fetching image:', error);
-                    return;
-                }
-
-                if (data && images.includes(data.current_image)) {
-                    currentIndex = images.indexOf(data.current_image);
-                    image.src = data.current_image;
-                } else {
-                    currentIndex = 0;
-                    image.src = images[currentIndex];
-                }
-            }
-
-            async function updateCurrentImage() {
-                const { error } = await supabase
-                    .from('on_off') // Ensure this matches your table name
-                    .upsert({ current_image: images[currentIndex] });
-
-                if (error) {
-                    console.error('Error updating image:', error);
-                } else {
-                    console.log('Image updated successfully');
-                }
-            }
-
-            image.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % images.length; // Toggle index
-                image.src = images[currentIndex]; // Change image source
-                updateCurrentImage(); // Update in the database
-            });
-
-            // Load initial image when the page is loaded
-            await loadCurrentImage();
-
-        } catch (error) {
-            console.error('Error initializing Supabase client:', error);
-        }
+        // Log the supabase object to check if it's loaded
+        console.log('Supabase:', supabase); // This should log the Supabase client object
     });
 </script>
 
